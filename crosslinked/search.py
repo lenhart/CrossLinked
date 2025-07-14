@@ -101,7 +101,7 @@ class CrossLinked:
     def parse_linkedin_name(self, data):
         try:
             name = data.split("-")[0].strip()
-            return unidecode(name).lower()
+            return unidecode(replace_special_characters(name)).lower()
         except:
             return False
 
@@ -179,3 +179,17 @@ def extract_links(resp):
 
 def extract_subdomain(url):
     return urlparse(url).netloc
+
+
+def replace_special_characters(text):
+    replacements = {
+        'ä': 'ae', 'Ä': 'Ae',
+        'ö': 'oe', 'Ö': 'Oe',
+        'ü': 'ue', 'Ü': 'Ue',
+        'ß': 'ss',
+        'œ': 'oe', 'Œ': 'Oe',
+        'æ': 'ae', 'Æ': 'Ae'
+    }
+    for orig, repl in replacements.items():
+        text = text.replace(orig, repl)
+    return text
